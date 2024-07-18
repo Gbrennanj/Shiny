@@ -91,8 +91,8 @@ server <- function(input, output) {
     update_lm <- function(){
         lmdata$model <- lm(y~x, data = dataInput())
         lmdata$rsq <- summary(lmdata$model)$r.squared
-        lmdata$slope <- summary(lmdata$model)$lm()
-        lmdata$intercept <- summary(lmdata$model)$coefficients[1,1]
+        lmdata$slope <- summary(lmdata$model)$coef[2]
+        lmdata$intercept <- summary(lmdata$model)$coef[1]
     }
     
     output$origPlot <- renderPlot({
@@ -104,7 +104,7 @@ server <- function(input, output) {
         abline(lmdata$model) 
         legend("topleft",legend=paste("R2 is", format(lmdata$rsq,digits=3)))
         legend("topright", legend=paste("intercept is", format(lmdata$intercept,digits=3)))
-        legend("topmiddle", legend=paste("slope is", format(lmdata$slope,digits=3)))
+        legend("bottomright", legend=paste("slope is", format(lmdata$slope,digits=3)))
     })
 
     output
