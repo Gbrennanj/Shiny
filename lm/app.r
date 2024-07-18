@@ -56,8 +56,9 @@ ui <- fluidPage(
                                      All = "all"),
                          selected = "head"),
              tags$hr(),
-            actionButton("go", "PLot Linear Model")
-        ),
+            actionButton("go", "Plot Linear Model"), 
+            
+         ),
 
         # Show a plot of the generated distribution
         mainPanel(
@@ -88,7 +89,10 @@ server <- function(input, output) {
     }) 
 
     update_lm <- function(){
-        lmdata$model <-lm(y~x, data = dataInput())
+        lmdata$model <- lm(y~x, data = dataInput())
+        lmdata$rsq <- summary(lmdata$model)$r.squared
+        lmdata$slope <- summary(lmdata$model)$lm()
+        lmdata$intercept <- summary(lmdata$model)$coefficients[1,1]
     }
     
     output$origPlot <- renderPlot({
@@ -97,8 +101,13 @@ server <- function(input, output) {
     
     output$lmPlot <- renderPlot({
         plot(dataInput()$x,dataInput()$y)
-        abline(lmdata$model)
+        abline(lmdata$model) 
+        legend("topleft",legend=paste("R2 is", format(lmdata$rsq,digits=3)))
+        legend("topright", legend=paste("intercept is", format(lmdata$intercept,digits=3)))
+        legend("topmiddle", legend=paste("slope is", format(lmdata$slope,digits=3)))
     })
+
+    output
     
     
     output$contents <- renderTable({
