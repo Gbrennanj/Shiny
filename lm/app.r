@@ -96,11 +96,12 @@ server <- function(input, output) {
     }
     
     output$origPlot <- renderPlot({
-        plot(dataInput()$x,dataInput()$y)
+        plot(dataInput()$x,dataInput()$y, xlab="X", ylab="Y")
+        
     })
     
     output$lmPlot <- renderPlot({
-        plot(dataInput()$x,dataInput()$y)
+        plot(dataInput()$x,dataInput()$y, xlab="X", ylab="Y")
         abline(lmdata$model) 
         legend("topleft",legend=paste("R2 is", format(lmdata$rsq,digits=3)))
         legend("topright", legend=paste("intercept is", format(lmdata$intercept,digits=3)))
